@@ -1,0 +1,35 @@
+{% load static %}
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+<link rel="stylesheet"
+      href="https://use.fontawesome.com/releases/v5.7.0/css/all.css">
+
+<nav class="navbar">
+    <div class="brand">
+        Employee Management System
+    </div>
+
+    <ul class="nav-links">
+        <li>
+            <a href="#"><i class="fa fa-home"></i> Home</a>
+        </li>
+        <li>
+            <a href="{% url 'registration' %}">
+                <i class="fas fa-user-plus"></i> Employee Sign-up
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fas fa-sign-in-alt"></i> Employee Login
+            </a>
+        </li>
+        <li>
+            <a href="#">
+                <i class="fas fa-user-shield"></i> Admin Login
+            </a>
+        </li>
+    </ul>
+</nav>
+

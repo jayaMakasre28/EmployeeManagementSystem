@@ -1,0 +1,98 @@
+{% load static %}
+{% include 'header.html'%}
+
+<link rel="stylesheet" href="{% static 'css/style.css' %}">
+
+
+<script>
+    function checkpassword()
+    {
+        if(document.signup.emp_password.value!=
+        document.signup.emp_confirm_password.value)
+    
+    {
+    alert('Password do not match');
+    document.signup.emp_confirm_password.focus();
+    return false;
+    }
+    }
+</script>
+
+
+<div class="page-bg">
+    <div class="form-container">
+
+        <div class="card">
+            <h2 class="title">Create an Account</h2>
+
+            <form method="post" action="" name="signup" onsubmit="return checkpassword()">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>First Name</label>
+                        <input type="text" name="firstname"
+                               placeholder="Enter First Name"
+                               pattern="[A-Za-z]+" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Last Name</label>
+                        <input type="text" name="lastname"
+                               placeholder="Enter Last Name"
+                               pattern="[A-Za-z]+" required>
+                    </div>
+                </div>
+
+                <div class="form-group full">
+                    <label>Employee Code</label>
+                    <input type="text" name="employeecode"
+                           placeholder="Enter Employee Code"
+                           pattern="[0-9]+" required>
+                </div>
+
+                <div class="form-group full">
+                    <label>Email</label>
+                    <input type="email" name="emp_email"
+                           placeholder="Enter Email" required>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" name="emp_password"
+                               placeholder="Enter Password"
+                               minlength="8" required>
+                        <small>Password must be at least 8 characters</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Confirm Password</label>
+                        <input type="password" name="emp_confirm_password"
+                               placeholder="Re-enter Password" required>
+                    </div>
+                </div>
+
+                <div class="button-box">
+                    <button type="submit">Create Account</button>
+                </div>
+
+            </form>
+        </div>
+
+    </div>
+</div>
+
+
+ {% if error == "no" %}
+<script>
+    alert("Account created successfully");
+    window.location.href = "{% url 'emp_login' %}";
+</script>
+{% elif error == "email_exists" %}
+<script>alert("Email already registered");</script>
+{% elif error == "empcode_exists" %}
+<script>alert("Employee code already exists");</script>
+{% elif error == "yes" %}
+<script>alert("Something went wrong");</script>
+{% endif %}
