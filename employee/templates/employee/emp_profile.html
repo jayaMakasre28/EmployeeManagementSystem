@@ -1,0 +1,34 @@
+
+{% extends 'employee/base.html' %}
+{% load static %}
+{% block title %}My Profile{% endblock %}
+
+{% block content %}
+<!-- ===== PROFILE HEADER ===== -->
+<h1 class="page-title">My Profile</h1>
+
+<!-- ===== PROFILE CARD ===== -->
+<div class="profile-wrapper">
+    
+    <!-- Profile Photo -->
+    {% if profile.profile_photo %}
+        <img src="{{ profile.profile_photo.url }}" alt="Profile Photo" class="profile-avatar">
+    {% else %}
+        <img src="{% static 'employee/images/default_avatar.jpg' %}" alt="Default Avatar" class="profile-avatar">
+    {% endif %}
+
+    <!-- Profile Details -->
+    <div class="profile-details">
+        <p><span>First Name:</span> {{ user.first_name }}</p>
+        <p><span>Last Name:</span> {{ user.last_name }}</p>
+        <p><span>Email:</span> {{ user.email }}</p>
+        <p><span>Job Title:</span> {{ profile.job_title|default:"Not set" }}</p>
+        <p><span>Education:</span> {{ profile.education|default:"Not set" }}</p>
+        <p><span>Gender:</span> {{ profile.gender|default:"Not set" }}</p>
+        <p><span>Experience:</span> {{ profile.experience|default:"0" }} Years</p>
+    </div>
+
+    <!-- Edit Profile Button -->
+    <a href="{% url 'edit_profile' %}" class="profile-edit-btn">Edit Profile</a>
+</div>
+{% endblock %}

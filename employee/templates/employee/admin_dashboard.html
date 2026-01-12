@@ -1,0 +1,196 @@
+{% extends 'employee/admin_base.html' %}
+{% block title %}Admin Dashboard{% endblock %}
+
+{% block content %}
+<!-- ===== WELCOME CARD ===== -->
+<div class="welcome-card">
+    <h1 class="page-title">Admin Dashboard <span class="wave">👋</span></h1>
+    <p class="subtitle">Manage employees, tasks, and attendance</p>
+</div>
+
+<!-- ===== ATTENDANCE SECTION ===== -->
+<div class="attendance-section">
+
+    <!-- Present Today -->
+    <div class="card attendance-card">
+        <h3>Present Today</h3>
+        <p class="count">{{ present_today }}</p>
+        {% if present_list %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in present_list %}
+                    <tr>
+                        <td>{{ record.user.first_name }} {{ record.user.last_name }}</td>
+                        <td>{{ record.user.email }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p class="no-data">No one is present today</p>
+        {% endif %}
+    </div>
+
+    <!-- Absent Today -->
+    <div class="card attendance-card">
+        <h3>Absent Today</h3>
+        {% if absent_list %}
+        <div class="table-wrapper">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Email</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in absent_list %}
+                    <tr>
+                        <td>{{ record.user.first_name }} {{ record.user.last_name }}</td>
+                        <td>{{ record.user.email }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+            <p class="no-data">No one is absent today</p>
+        {% endif %}
+    </div>
+
+</div>
+
+<!-- ===== SEARCH EMPLOYEES ===== -->
+<div class="card search-section">
+    <h3>Search Employees</h3>
+    <form method="get" action="{% url 'search_employees' %}" class="admin-search-form">
+        <input type="text" name="q" placeholder="Search by name or email">
+        <button type="submit">Search</button>
+    </form>
+</div>
+
+<!-- ===== EMPLOYEE TABLE ===== -->
+<div class="card">
+    <h3>Employees</h3>
+    <div class="table-wrapper">
+        <table>
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Job Title</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for emp in employees %}
+                <tr>
+                    <td>{{ emp.first_name }} {{ emp.last_name }}</td>
+                    <td>{{ emp.email }}</td>
+                    <td>{{ emp.profile.job_title|default:"Not set" }}</td>
+                    <td>
+                        <a href="{% url 'delete_employee' emp.id %}" class="btn-delete">Delete</a>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="no-data">No employees found</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- ===== ASSIGN TASK ===== -->
+
+<div class="card">
+
+
+    <h3>Assign Task</h3>
+
+    <form method="POST" class="task-assign-form">
+        {% csrf_token %}
+
+        <div class="task-form-group">
+            <label for="employee">Select Employee(s):</label>
+            <select id="employee" name="employee" multiple required>
+                {% for emp in employees %}
+                    <option value="{{ emp.id }}">
+                        {{ emp.first_name }} {{ emp.last_name }}
+                    </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="task-form-group">
+            <label for="title">Task Title:</label>
+            <input type="text" id="title" name="title" placeholder="Task title" required>
+        </div>
+
+        <button type="submit" class="task-submit-btn">
+            Assign
+        </button>
+    </form>
+
+</div>
+
+
+
+<!-- ===== PENDING TASKS ===== -->
+<div class="card">
+    <h3>Pending Tasks</h3>
+    {% if pending_tasks %}
+    <table>
+        <tr>
+            <th>Employee</th>
+            <th>Task</th>
+            <th>Status</th>
+            <th>Action</th>
+        </tr>
+        {% for task in pending_tasks %}
+        <tr>
+            <td>{{ task.user.username }}</td>
+            <td>{{ task.title }}</td>
+            <td>{{ task.status }}</td>
+            <td><a href="{% url 'delete_task' task.id %}" class="btn-delete">Delete</a></td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <p>No pending tasks</p>
+    {% endif %}
+</div>
+
+<!-- ===== COMPLETED TASKS ===== -->
+<div class="card">
+    <h3>Completed Tasks</h3>
+    {% if completed_tasks %}
+    <table>
+        <tr>
+            <th>Employee</th>
+            <th>Task</th>
+            <th>Status</th>
+        </tr>
+        {% for task in completed_tasks %}
+        <tr>
+            <td>{{ task.user.username }}</td>
+            <td>{{ task.title }}</td>
+            <td>{{ task.status }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% else %}
+        <p>No completed tasks</p>
+    {% endif %}
+</div>
+
+{% endblock %}

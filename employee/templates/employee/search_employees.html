@@ -1,0 +1,31 @@
+{% extends 'employee/base.html' %}
+{% block title %}Search Employees{% endblock %}
+
+{% block content %}
+<h2>Search Results</h2>
+
+{% if employees %}
+<div class="table-wrapper">
+    <table>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Job Title</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for emp in employees %}
+            <tr>
+                <td>{{ emp.first_name }} {{ emp.last_name }}</td>
+                <td>{{ emp.email }}</td>
+                <td>{{ emp.profile.job_title|default:"Not set" }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<p class="no-data">No employees found.</p>
+{% endif %}
+{% endblock %}

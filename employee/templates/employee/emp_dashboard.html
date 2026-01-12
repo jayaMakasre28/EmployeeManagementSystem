@@ -1,0 +1,106 @@
+{% extends 'employee/base.html' %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<div class="dashboard-wrapper">
+
+  <!-- Welcome Section -->
+  <div class="welcome-card">
+    <h1>
+      Welcome, {{ request.user.first_name }} {{ request.user.last_name }}
+      <span class="wave">👋</span>
+    </h1>
+    <p>Your account summary is shown below.</p>
+  </div>
+
+  <!-- 🔍 Search (FULL WIDTH, SAME LEVEL) -->
+  <div class="search-section">
+    <h3>🔍 Search Employees</h3>
+
+    <form method="get" action="{% url 'search_employees' %}" class="search-form">
+      <input
+        type="text"
+        name="q"
+        placeholder="Search employee by name or email"
+        required
+      >
+      <button type="submit">Search</button>
+    </form>
+  </div>
+  
+
+    <div class="dashboard-cards">
+    <!-- Profile Completion -->
+    <div class="info-card">
+      <h3>📊 Profile Completion</h3>
+      <p class="completion-text">{{ completion }}% Completed</p>
+
+      <div class="progress-container">
+        <div class="progress-bar-fill" style="width: {{ completion }}%;">
+          {{ completion }}%
+        </div>
+      </div>
+
+      {% if completion < 100 %}
+        <a href="{% url 'edit_profile' %}" class="primary-btn">
+          Complete Profile
+        </a>
+      {% endif %}
+    </div>
+
+    <!-- Tasks -->
+    <div class="info-card">
+      <h3>📝 My Tasks</h3>
+
+
+      {% if tasks %}
+        <ul class="task-list">
+          {% for task in tasks %}
+            <li>
+              <span class="task-title">{{ task.title }}</span>
+              <span class="task-status">{{ task.status }}</span>
+               {% if task.status == "Pending" %}
+                <form method="POST" style="display:inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="task_id" value="{{ task.id }}">
+                    <button type="submit">Complete</button>
+                </form>
+                {% endif %}
+            </li>
+            
+          {% endfor %}
+        </ul>
+      {% else %}
+        <p class="muted-text">No tasks assigned.</p>
+      {% endif %}
+    </div>
+
+    <!-- Attendance -->
+    <div class="info-card">
+    <h3>📅 Attendance</h3>
+
+    {% if attendance %}
+      <p>
+        Status Today:
+        <strong class="attendance-status {{ attendance.status|lower }}">
+          {{ attendance.status }}
+        </strong>
+      </p>
+    {% else %}
+      <form method="post" action="{% url 'mark_attendance' %}">
+        {% csrf_token %}
+
+        <button type="submit" name="status" value="Present" class="primary-btn">
+          Mark Present
+        </button>
+
+        <button type="submit" name="status" value="Absent" class="danger-btn">
+          Mark Absent
+        </button>
+      </form>
+    {% endif %}
+  </div>
+
+{% endblock %}

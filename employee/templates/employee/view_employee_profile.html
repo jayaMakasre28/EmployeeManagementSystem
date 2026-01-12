@@ -1,0 +1,17 @@
+{% extends 'employee/base.html' %}
+{% block title %}Employee Profile{% endblock %}
+
+{% block content %}
+<div class="card">
+    <h2>{{ user_profile.first_name }} {{ user_profile.last_name }}</h2>
+    <p><strong>Email:</strong> {{ user_profile.email }}</p>
+
+    <p><strong>Job Title:</strong> {{ profile.job_title }}</p>
+    <p><strong>Education:</strong> {{ profile.education }}</p>
+    <p><strong>Experience:</strong> {{ profile.experience }}</p>
+
+    {% if profile.profile_photo %}
+        <img src="{{ profile.profile_photo.url }}" class="profile-photo">
+    {% endif %}
+</div>
+{% endblock %}

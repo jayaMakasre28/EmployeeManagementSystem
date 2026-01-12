@@ -1,0 +1,49 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Dashboard{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'employee/css/style.css' %}">
+</head>
+<body>
+     
+<!-- ===== APP LAYOUT ===== -->
+<div class="emp-layout">
+
+    <!-- ===== SIDEBAR ===== -->
+    <aside class="emp-sidebar">
+        <h2 class="emp-logo">EMS</h2>
+
+        <p class="emp-user">
+            👤 {{ request.user.first_name }}
+        </p>
+
+        <nav class="emp-nav">
+            <a href="{% url 'emp_dashboard' %}">Dashboard</a>
+            <a href="{% url 'emp_profile' %}">Profile</a>
+            <a href="{% url 'emp_profile' %}">Edit Profile</a>
+            <a href="{% url 'emp_logout' %}">Logout</a>
+        </nav>
+    </aside>
+
+    <!-- ===== MAIN CONTENT ===== -->
+    <main class="emp-main">
+        <div class="page-container">
+
+            <!-- Messages -->
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+
+            <!-- Dynamic content -->
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+</div>
+
+</body>
+</html>
