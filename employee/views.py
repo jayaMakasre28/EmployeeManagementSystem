@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from .models import Employee 
 from django.contrib.auth import authenticate,login,logout
-from django.contrib.auth.decorators import login_required
+
 from django.contrib import messages
 
 
-@login_required
+
 def employee_list(request):
 
     search = request.GET.get('search')
@@ -20,7 +20,7 @@ def employee_list(request):
 
     return render(request, 'employee_list.html', {'employees': employees})
 
-@login_required
+
 def add_employee(request):
 
     if request.method == 'POST':
@@ -44,7 +44,7 @@ def add_employee(request):
     
     return render(request, 'add_employee.html') 
 
-@login_required
+
 def delete_employee(request, id):
 
     employee = Employee.objects.get(id=id)
@@ -55,7 +55,7 @@ def delete_employee(request, id):
 
     return redirect('employee_list')
 
-@login_required
+
 def update_employee(request, id):
 
     employee = Employee.objects.get(id=id)
