@@ -92,7 +92,7 @@ def login_user(request):
 
             login(request, user)
 
-            return redirect('employee_list')
+            return redirect('/')
 
     return render(request, 'login.html')
 
