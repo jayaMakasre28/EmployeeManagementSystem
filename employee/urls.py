@@ -3,7 +3,9 @@ from . import views
 
 urlpatterns = [
 
-    path('', views.employee_list, name='employee_list'),
+    path('', views.home, name='home'),
+
+    path('employees/', views.employee_list, name='employee_list'),
 
     path('add/', views.add_employee, name='add_employee'),
 
@@ -15,4 +17,11 @@ urlpatterns = [
 
     path('logout/', views.logout_user, name='logout'),
 
+    path('dashboard/', views.dashboard,name='dashboard'),
+
+    path('export-csv/', views.export_csv, name='export_csv'),
+
+    path('employee/<int:id>/', views.employee_detail, name='employee_detail'),
+
+    path('signup/', views.signup_page, name='signup'),
 ]
